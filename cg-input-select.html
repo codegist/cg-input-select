@@ -45,7 +45,15 @@
             },
             _selectionChanged:function(e){
                 this.$.input.value = e.detail.item.dataset.value;
+                var item = null;
+                for(var i = 0; i < this.list.length; i++) {
+                    if(this.list[i].value == e.detail.item.dataset.value) {
+                       item = this.list[i];
+                        break
+                    }
+                }
                 this._decoratorElement && this._decoratorElement.inputChanged();
+                this.fire('select', item);
             }
         });
     </script>
