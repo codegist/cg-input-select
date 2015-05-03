@@ -44,6 +44,17 @@
                 </paper-input-decorator>
             </div>
         </section>
+        <h2>input select form demo selected</h2>
+        <section>
+            <div horizontal layout wrap class="party-info-form">
+                <paper-input-decorator label="Document Type" floatingLabel error="input is required!" autoValidate>
+                    <cg-input-select list="{{[{value:'dni', label:'D.N.I.'}, {value:'passport'}]}}" value="passport"></cg-input-select>
+                </paper-input-decorator>
+                <paper-input-decorator label="DNI" floatingLabel error="input is required!" autoValidate>
+                    <input is="core-input">
+                </paper-input-decorator>
+            </div>
+        </section>
     </section>
 </template>
 
