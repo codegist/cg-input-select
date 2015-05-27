@@ -4,7 +4,7 @@
 <link href="../core-menu/core-menu.html" rel="import">
 <link href="../paper-item/paper-item.html" rel="import">
 
-<polymer-element name="cg-input-select" attributes="label list required value">
+<polymer-element name="cg-input-select" attributes="label list required value ">
     <template>
         <style>
             paper-dropdown-menu {
@@ -21,7 +21,7 @@
         </style>
         <input is="core-input" required?="{{required}}" hidden id="input">
         <paper-dropdown-menu label="{{label}}" on-core-select="{{_selectionChanged}}">
-            <paper-dropdown class="dropdown">
+            <paper-dropdown class="dropdown" layered="true">
                 <core-menu class="menu" selected="{{value}}" valueattr="data-value">
                     <template repeat="{{list}}">
                         <paper-item data-value="{{value}}">{{label || value}}</paper-item>
@@ -35,19 +35,26 @@
             label:null,
             required:false,
             list:null,
+            value:null,
             _decoratorElement:null,
             domReady:function(){
-                if(this.parentElement.tagName.toLowerCase() == "paper-input-decorator") {
+                if(this.parentElement && this.parentElement.tagName.toLowerCase() == "paper-input-decorator") {
                     this._decoratorElement = this.parentElement; // _decoratorElement thing's quite nasty..
                     this._decoratorElement.input = this.$.input; // _decoratorElement thing's quite nasty..
                     this.label = this._decoratorElement.getAttribute("label");
                 }
             },
+            valueChanged:function(){
+                this.setSelection(this.value);
+            },
             _selectionChanged:function(e){
-                this.$.input.value = e.detail.item.dataset.value;
+                this.setSelection(e.detail.item.dataset.value);
+            },
+            setSelection:function(value){
+                this.$.input.value = value;
                 var item = null;
                 for(var i = 0; i < this.list.length; i++) {
-                    if(this.list[i].value == e.detail.item.dataset.value) {
+                    if(this.list[i].value == value) {
                        item = this.list[i];
                         break
                     }
