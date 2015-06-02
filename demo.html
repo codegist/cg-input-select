@@ -5,13 +5,22 @@
     <title>cg-datetime-input Demo</title>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="cg-input-select.html">
+    <link rel="import" href="../paper-input/paper-input-container.html">
+    <link rel="import" href="../paper-input/paper-input-error.html">
 </head>
 
 
 <body unresolved fullbleed layout vertical center center-justified>
 
 <template is="dom-bind" id="sandbox">
-    <cg-input-select list='[[values]]'></cg-input-select>
+    <cg-input-select list='[[values]]' label="Hello"></cg-input-select>
+    <br/>
+    <paper-input-container always-float-label auto-validate attr-for-value="value">
+        <label>Color</label>
+        <cg-input-select class="paper-input-input" required="true" list='[[values]]'></cg-input-select>
+        <paper-input-error>input is required!</paper-input-error>
+    </paper-input-container>
+
     <br/>
     sdfd
     <br/>
