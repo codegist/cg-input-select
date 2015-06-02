@@ -1,67 +1,110 @@
-<link href="../polymer/polymer.html" rel="import">
-<link href="../paper-dropdown-menu/paper-dropdown-menu.html" rel="import">
-<link href="../paper-dropdown/paper-dropdown.html" rel="import">
-<link href="../core-menu/core-menu.html" rel="import">
-<link href="../paper-item/paper-item.html" rel="import">
+<link rel="import" href="../polymer/polymer.html" >
+<link rel="import" href="../paper-styles/paper-styles.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-collapse/iron-collapse.html">
+<link rel="import" href="../paper-menu/paper-menu.html">
+<link rel="import" href="../paper-material/paper-material.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../paper-item/paper-item.html">
 
-<polymer-element name="cg-input-select" attributes="label list required value ">
-    <template>
-        <style>
-            paper-dropdown-menu {
-                border:none!important;
-                padding:0px!important;
-                margin:0px!important;
-            }
-            paper-dropdown-menu /deep/ #label.selectedItem {
-                color:black!important;
-            }
-            paper-dropdown-menu /deep/ #label {
-                color:#9a9a9a!important;
-            }
-        </style>
-        <input is="core-input" required?="{{required}}" hidden id="input">
-        <paper-dropdown-menu label="{{label}}" on-core-select="{{_selectionChanged}}">
-            <paper-dropdown class="dropdown" layered="true">
-                <core-menu class="menu" selected="{{value}}" valueattr="data-value">
-                    <template repeat="{{list}}">
-                        <paper-item data-value="{{value}}">{{label || value}}</paper-item>
+<dom-module id="cg-input-select">
+<style>
+    .wrapper {
+        @apply(--layout-relative)
+    }
+    .wrapper .input {
+        @apply(--paper-font-body1);
+        text-transform: none;
+    }
+    .wrapper #select {
+        position:absolute;
+        z-index: 1;
+        /*outline: 0;*/
+    }
+    .wrapper #menu {
+        @apply(--paper-font-body1);
+    }
+    .wrapper paper-material {
+        max-height:200px;
+        overflow:auto;
+        padding:5px;
+    }
+    .wrapper #select .item {
+        @apply(--paper-font-body1);
+    }
+    .wrapper #select .item.iron-selected {
+        font-weight: bold!important;
+    }
+</style>
+<template>
+    <div class="wrapper">
+        <paper-button on-tap="_toggle" class="input"><span>[[displayLabel(selected)]]</span><iron-icon icon="arrow-drop-down"></iron-icon></paper-button>
+        <iron-collapse id="select">
+            <paper-material>
+                <paper-menu id="menu" selected="{{value}}" attr-for-selected="value">
+                    <template is="dom-repeat" items="[[list]]" as="item">
+                        <paper-item class="item" value$="[[item.value]]">[[displayLabel(item)]]</paper-item>
                     </template>
-                </core-menu>
-            </paper-dropdown>
-        </paper-dropdown-menu>
-    </template>
-    <script>
-        Polymer("cg-input-select", {
-            label:null,
-            required:false,
-            list:null,
-            value:null,
-            _decoratorElement:null,
-            domReady:function(){
-                if(this.parentElement && this.parentElement.tagName.toLowerCase() == "paper-input-decorator") {
-                    this._decoratorElement = this.parentElement; // _decoratorElement thing's quite nasty..
-                    this._decoratorElement.input = this.$.input; // _decoratorElement thing's quite nasty..
-                    this.label = this._decoratorElement.getAttribute("label");
-                }
+                </paper-menu>
+            </paper-material>
+        </iron-collapse>
+    </div>
+</template>
+</dom-module>
+<script>
+    Polymer({
+        is:"cg-input-select",
+        properties:{
+            label:String,
+            required:{
+                type:Boolean,
+                value:false,
             },
-            valueChanged:function(){
-                this.setSelection(this.value);
+            list:Array,
+            value:{
+                type:String,
+                observer:'valueChanged'
             },
-            _selectionChanged:function(e){
-                this.setSelection(e.detail.item.dataset.value);
+            selected:{
+                computed:'computeSelected(list, value)'
             },
-            setSelection:function(value){
-                this.$.input.value = value;
-                var item = null;
-                for(var i = 0; i < this.list.length; i++) {
-                    if(this.list[i].value == value) {
-                       item = this.list[i];
-                        break
+        },
+        attached:function(){
+            document.addEventListener("click", this._documentClick.bind(this));
+        },
+        detached:function(){
+            document.removeEventListener("click", this._documentClick.bind(this));
+        },
+        _toggle:function(){
+            this.$.select.toggle();
+        },
+        _documentClick:function(e){
+            var clickLocation = e.target;
+            while(clickLocation != null && clickLocation != this) clickLocation = clickLocation.parentElement;
+            if(clickLocation == this) return;
+            if(this.$.select.opened){
+                this.$.select.opened = false;
+            }
+        },
+        displayLabel:function(value){
+            if(!value) return "";
+            return value.label || value.value;
+        },
+        computeSelected:function(list, value){
+            if(this.list) {
+                for(var i = 0; i < list.length; i++) {
+                    if(list[i].value == value) {
+                        return list[i];
                     }
                 }
-                this._decoratorElement && this._decoratorElement.inputChanged();
-                this.fire('select', item);
             }
-        });
-    </script>
-</polymer-element>
+            return null;
+        },
+        valueChanged:function(){
+            console.log("this.value: " + this.value);
+            this.$.select.opened = false;
+        },
+    });
+</script>

@@ -3,79 +3,66 @@
 <head>
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <title>cg-datetime-input Demo</title>
-    <link rel="import" href="../paper-input/paper-input-decorator.html">
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="cg-input-select.html">
-    <style>
-        .demo {
-            margin-boottom:60px;
-            min-height: 300px;
-        }
-        .demo-item {
-            padding: 2px;
-            min-height: 300px;
-        }
-    </style>
 </head>
 
 
 <body unresolved fullbleed layout vertical center center-justified>
 
-<template id="sandbox" is="auto-binding">
-    <section layout vertical left>
-        <h2>input select form demo required</h2>
-        <section>
-            <div horizontal layout wrap class="party-info-form">
-                <paper-input-decorator label="Document Type" floatingLabel error="input is required!" autoValidate>
-                    <cg-input-select required list="{{[{value:'dni', label:'D.N.I.'}, {value:'passport'}]}}"></cg-input-select>
-                </paper-input-decorator>
-                <paper-input-decorator label="DNI" floatingLabel error="input is required!" autoValidate>
-                    <input is="core-input" required>
-                </paper-input-decorator>
-            </div>
-        </section>
-        <h2>input select form demo</h2>
-        <section>
-            <div horizontal layout wrap class="party-info-form">
-                <paper-input-decorator label="Document Type" floatingLabel error="input is required!" autoValidate>
-                    <cg-input-select list="{{[{value:'dni', label:'D.N.I.'}, {value:'passport'}]}}"></cg-input-select>
-                </paper-input-decorator>
-                <paper-input-decorator label="DNI" floatingLabel error="input is required!" autoValidate>
-                    <input is="core-input">
-                </paper-input-decorator>
-            </div>
-        </section>
-        <h2>input select form demo selected</h2>
-        <section>
-            <div horizontal layout wrap class="party-info-form">
-                <paper-input-decorator label="Document Type" floatingLabel error="input is required!" autoValidate>
-                    <cg-input-select list="{{[{value:'dni', label:'D.N.I.'}, {value:'passport'}]}}" value="passport"></cg-input-select>
-                </paper-input-decorator>
-                <paper-input-decorator label="DNI" floatingLabel error="input is required!" autoValidate>
-                    <input is="core-input">
-                </paper-input-decorator>
-            </div>
-        </section>
-    </section>
+<template is="dom-bind" id="sandbox">
+    <cg-input-select list='[[values]]'></cg-input-select>
+    <br/>
+    sdfd
+    <br/>
+    <cg-input-select list='[[values]]' value="passport"></cg-input-select>
+    <br/>
+    sdfd
+    <!--<section layout vertical left>-->
+        <!--<h2>input select form demo required</h2>-->
+        <!--<section>-->
+            <!--<div horizontal layout wrap class="party-info-form">-->
+                <!--<paper-input-decorator label="Document Type" floatingLabel error="input is required!" autoValidate>-->
+                    <!--<cg-input-select required list="{{[{value:'dni', label:'D.N.I.'}, {value:'passport'}]}}"></cg-input-select>-->
+                <!--</paper-input-decorator>-->
+                <!--<paper-input-decorator label="DNI" floatingLabel error="input is required!" autoValidate>-->
+                    <!--<input is="core-input" required>-->
+                <!--</paper-input-decorator>-->
+            <!--</div>-->
+        <!--</section>-->
+        <!--<h2>input select form demo</h2>-->
+        <!--<section>-->
+            <!--<div horizontal layout wrap class="party-info-form">-->
+                <!--<paper-input-decorator label="Document Type" floatingLabel error="input is required!" autoValidate>-->
+                    <!--<cg-input-select list="{{[{value:'dni', label:'D.N.I.'}, {value:'passport'}]}}"></cg-input-select>-->
+                <!--</paper-input-decorator>-->
+                <!--<paper-input-decorator label="DNI" floatingLabel error="input is required!" autoValidate>-->
+                    <!--<input is="core-input">-->
+                <!--</paper-input-decorator>-->
+            <!--</div>-->
+        <!--</section>-->
+        <!--<h2>input select form demo selected</h2>-->
+        <!--<section>-->
+            <!--<div horizontal layout wrap class="party-info-form">-->
+                <!--<paper-input-decorator label="Document Type" floatingLabel error="input is required!" autoValidate>-->
+                    <!--<cg-input-select list="{{[{value:'dni', label:'D.N.I.'}, {value:'passport'}]}}" value="passport"></cg-input-select>-->
+                <!--</paper-input-decorator>-->
+                <!--<paper-input-decorator label="DNI" floatingLabel error="input is required!" autoValidate>-->
+                    <!--<input is="core-input">-->
+                <!--</paper-input-decorator>-->
+            <!--</div>-->
+        <!--</section>-->
+    <!--</section>-->
 </template>
 
 <script>
-    window.addEventListener('template-bound', function(){
+    window.addEventListener('WebComponentsReady', function() {
         var sandbox = document.getElementById('sandbox');
-
-        sandbox.myObject = {
-            datetime1:new Date("2016-02-24T13:24:00.000Z"),
-            datetime2:null,
-            datetimestring1:"2016-02-24T13:24:00.000Z",
-            datetimestring2:null,
-            datetimestring3:"",
-            datetimestring4:"dsfds"
-        }
-
-//        var inputs = document.querySelectorAll('paper-input-decorator');
-//        for (var i = 0; i < inputs.length; i++) {
-//            inputs[i].disabled = true;
-//            inputs[i].querySelectorAll("input,cg-date-input")[0].disabled = true;
-//        }
+        sandbox.values = [
+            {"value":"dnic", "label":"D.N.I."},
+            {"value":"dnvi", "label":"D.N.I."},
+            {"value":"passport"}
+        ];
     });
 </script>
 
