@@ -40,7 +40,7 @@
     <div class="wrapper">
         <cg-required-validator required="[[required]]"></cg-required-validator>
         <paper-button on-tap="_toggleDD" class="input"><span>[[displayValueOrLabel(label, selected)]]</span><iron-icon icon="arrow-drop-down"></iron-icon></paper-button>
-        <cg-dropdown list="[[list]]" value="{{selected.value}}" id="dd" owner-target="[[_self]]">
+        <cg-dropdown list="[[list]]" value="{{selected.value}}" id="dd">
             <paper-menu dd-content id="menu" selected="{{value}}" attr-for-selected="value">
                 <template is="dom-repeat" items="[[list]]" as="item">
                     <paper-item class="item" value$="[[item.value]]">[[displayLabel(item)]]</paper-item>
@@ -78,10 +78,6 @@
             },
             selected: {
                 computed:'computeSelected(list, value, label)',
-            },
-            _self:{
-                type:Element,
-                value:function(){return this;}
             },
         },
         behaviors:[CG.ValidatableBehavior],
