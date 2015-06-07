@@ -9,6 +9,7 @@
 <link rel="import" href="../paper-item/paper-item.html">
 <link rel="import" href="../cg-base/cg-required-validator.html">
 <link rel="import" href="../cg-base/cg-validatable-behavior.html">
+<link rel="import" href="../cg-utils/cg-utilities-behavior.html">
 <link rel="import" href="../cg-dropdown/cg-dropdown.html">
 
 <dom-module id="cg-input-select">
@@ -39,11 +40,11 @@
 <template>
     <div class="wrapper">
         <cg-required-validator required="[[required]]"></cg-required-validator>
-        <paper-button on-tap="_toggleDD" class="input"><span>[[displayValueOrLabel(label, selected)]]</span><iron-icon icon="arrow-drop-down"></iron-icon></paper-button>
+        <paper-button on-tap="_toggleDD" class="input"><span>[[firstPropFoundOrDefault(selected, label, labelPropPath, valuePropPath)]]</span><iron-icon icon="arrow-drop-down"></iron-icon></paper-button>
         <cg-dropdown list="[[list]]" value="{{selected.value}}" id="dd" owner-target="[[_self]]">
             <paper-menu dd-content id="menu" selected="{{value}}" attr-for-selected="value">
                 <template is="dom-repeat" items="[[list]]" as="item">
-                    <paper-item class="item" value$="[[item.value]]">[[displayLabel(item)]]</paper-item>
+                    <paper-item class="item" value$="[[get(valuePropPath, item)]]">[[firstPropFound(item, labelPropPath, valuePropPath)]]</paper-item>
                 </template>
             </paper-menu>
         </cg-dropdown>
@@ -64,9 +65,16 @@
             },
             value:{
                 type:String,
-                value:null,
                 notify:true,
                 observer:'_selection'
+            },
+            valuePropPath:{
+                type:String,
+                value:"value",
+            },
+            labelPropPath:{
+                type:String,
+                value:"label",
             },
             label:{
                 type:String,
@@ -84,7 +92,7 @@
                 value:function(){return this;}
             },
         },
-        behaviors:[CG.ValidatableBehavior],
+        behaviors:[CG.ValidatableBehavior, CG.UtilitiesBehavior],
         _toggleDD:function(e){
             this.$.dd.toggle();
         },
@@ -94,18 +102,10 @@
         _closeDD:function(e){
             this.$.dd.close();
         },
-        displayValueOrLabel:function(label, selected){
-            if(!selected) return label;
-            return this.displayLabel(selected);
-        },
-        displayLabel:function(value){
-            if(!value) return undefined;
-            return value.label || value.value;
-        },
         computeSelected:function(list, value){
             if(list) {
                 for(var i = 0; i < list.length; i++) {
-                    if(list[i].value == value) {
+                    if(this.get(this.valuePropPath, list[i]) == value) {
                         return list[i];
                     }
                 }
@@ -115,6 +115,7 @@
         _selection:function(){
             this._closeDD();
             this.toggleClass("selected", this.selected != null, this);
+            this.fire("input", this.selected);
         },
     });
 </script>
