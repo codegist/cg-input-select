@@ -20,6 +20,15 @@
     .wrapper .input {
         @apply(--paper-font-body1);
         text-transform: none;
+        line-height:inherit!important;
+    }
+    .wrapper .input ::content paper-material,
+    .wrapper .input {
+        padding:0px;
+        margin:0px;
+    }
+    .wrapper .input .content {
+        @apply(--layout-horizontal);
     }
     .wrapper #menu {
         @apply(--paper-font-body1);
@@ -40,7 +49,9 @@
 <template>
     <div class="wrapper">
         <cg-required-validator required="[[required]]"></cg-required-validator>
-        <paper-button on-tap="_toggleDD" class="input"><span>[[firstPropFoundOrDefault(selected, label, labelPropPath, valuePropPath)]]</span><iron-icon icon="arrow-drop-down"></iron-icon></paper-button>
+        <paper-button on-tap="_toggleDD" class="input">
+            <div class="content"><div>[[firstPropFoundOrDefault(selected, label, labelPropPath, valuePropPath)]]</div><iron-icon icon="arrow-drop-down"></iron-icon></div>
+        </paper-button>
         <cg-dropdown id="dd" owner-target="[[_self]]">
             <paper-menu dd-content id="menu" selected="{{value}}" attr-for-selected="value">
                 <template is="dom-repeat" items="[[list]]" as="item">
@@ -78,7 +89,8 @@
             },
             label:{
                 type:String,
-                value:"Select an item"
+                value:"Select an item",
+                observer:"changgggg",
             },
             validator: {
                 type: String,
@@ -101,6 +113,9 @@
         },
         _closeDD:function(e){
             this.$.dd.close();
+        },
+        changgggg:function(e){
+            console.log()
         },
         computeSelected:function(list, value){
             if(list) {
