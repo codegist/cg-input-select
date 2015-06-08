@@ -41,7 +41,7 @@
     <div class="wrapper">
         <cg-required-validator required="[[required]]"></cg-required-validator>
         <paper-button on-tap="_toggleDD" class="input"><span>[[firstPropFoundOrDefault(selected, label, labelPropPath, valuePropPath)]]</span><iron-icon icon="arrow-drop-down"></iron-icon></paper-button>
-        <cg-dropdown list="[[list]]" value="{{selected.value}}" id="dd" owner-target="[[_self]]">
+        <cg-dropdown id="dd" owner-target="[[_self]]">
             <paper-menu dd-content id="menu" selected="{{value}}" attr-for-selected="value">
                 <template is="dom-repeat" items="[[list]]" as="item">
                     <paper-item class="item" value$="[[get(valuePropPath, item)]]">[[firstPropFound(item, labelPropPath, valuePropPath)]]</paper-item>
