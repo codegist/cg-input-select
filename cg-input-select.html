@@ -33,14 +33,14 @@
     .wrapper #menu {
         @apply(--paper-font-body1);
     }
-    .wrapper paper-material {
+    .wrapper #dd ::content #dd_wrapper {
         max-height:200px;
         overflow:auto;
-        margin:5px;
     }
     .wrapper .item {
         @apply(--paper-font-body1);
         cursor: pointer;
+        white-space: nowrap;
     }
     .wrapper .item.iron-selected {
         font-weight: bold!important;
@@ -76,6 +76,7 @@
             },
             value:{
                 type:String,
+                value:null,
                 notify:true,
                 observer:'_selection'
             },
@@ -97,7 +98,7 @@
                 value: 'cg-required-validator'
             },
             selected: {
-                computed:'computeSelected(list, value, label)',
+                computed:'computeSelected(list, value, label)'
             },
             _self:{
                 type:Element,
