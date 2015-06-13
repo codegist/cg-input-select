@@ -45,15 +45,30 @@
     .wrapper .item.iron-selected {
         font-weight: bold!important;
     }
+
+    :host([value-selected]) .wrapper .content .label {
+        color: var(--paper-input-container-color, --primary-text-color);
+        @apply(--paper-font-subhead);
+        @apply(--paper-input-container-label);
+    }
+    :host([no-value-selected]) .wrapper .content .label {
+        color: var(--paper-input-container-color, --secondary-text-color);
+        @apply(--paper-font-subhead);
+        @apply(--paper-input-container-label);
+    }
+
+    :host([no-label][no-value-selected]) .wrapper .content .label {
+        color:transparent!important;
+    }
 </style>
 <template>
     <div class="wrapper">
         <cg-required-validator required="[[required]]"></cg-required-validator>
         <paper-button on-tap="_toggleDD" class="input">
-            <div class="content"><div>[[firstPropFoundOrDefault(selected, label, labelPropPath, valuePropPath)]]</div><iron-icon icon="arrow-drop-down"></iron-icon></div>
+            <div class="content"><span class="label">[[firstPropFoundOrDefault(selected, label, labelPropPath, valuePropPath)]]</span><iron-icon icon="arrow-drop-down"></iron-icon></div>
         </paper-button>
-        <cg-dropdown id="dd" owner-target="[[_self]]">
-            <paper-menu dd-content id="menu" selected="{{value}}" attr-for-selected="value">
+        <cg-dropdown id="dd" owner-target="[[self]]">
+            <paper-menu dd-content id="menu" selected="{{value}}" attr-for-selected="value" on-tap="_onSelectTap">
                 <template is="dom-repeat" items="[[list]]" as="item">
                     <paper-item class="item" value$="[[get(valuePropPath, item)]]">[[firstPropFound(item, labelPropPath, valuePropPath)]]</paper-item>
                 </template>
@@ -74,6 +89,11 @@
                 type:Boolean,
                 value:false,
             },
+            noLabel:{
+                type:Boolean,
+                value:false,
+                reflectToAttribute:true
+            },
             value:{
                 type:String,
                 value:null,
@@ -91,7 +111,6 @@
             label:{
                 type:String,
                 value:"Select an item",
-                observer:"changgggg",
             },
             validator: {
                 type: String,
@@ -100,9 +119,13 @@
             selected: {
                 computed:'computeSelected(list, value, label)'
             },
-            _self:{
-                type:Element,
-                value:function(){return this;}
+            valueSelected: {
+                computed:'computeValueSelected(value)',
+                reflectToAttribute:true
+            },
+            noValueSelected: {
+                computed:'computeNoValueSelected(value)',
+                reflectToAttribute:true
             },
         },
         behaviors:[CG.ValidatableBehavior, CG.UtilitiesBehavior],
@@ -115,8 +138,11 @@
         _closeDD:function(e){
             this.$.dd.close();
         },
-        changgggg:function(e){
-            console.log()
+        computeNoValueSelected:function(){
+            return this.value == null || this.value == undefined;
+        },
+        computeValueSelected:function(){
+            return this.value != null;
         },
         computeSelected:function(list, value){
             if(list) {
@@ -128,10 +154,16 @@
             }
             return null;
         },
+        _onSelectTap:function(){
+            this._tapped = true;
+        },
         _selection:function(){
-            this._closeDD();
-            this.toggleClass("selected", this.selected != null, this);
-            this.fire("input", this.selected);
+            if(this._tapped) {
+                this._closeDD();
+                this.toggleClass("selected", this.selected != null, this);
+                this.fire("input", this.selected);
+                this._tapped = false;
+            }
         },
     });
 </script>
