@@ -9,7 +9,7 @@
 <link rel="import" href="../paper-item/paper-item.html">
 <link rel="import" href="../cg-base/cg-required-validator.html">
 <link rel="import" href="../cg-base/cg-validatable-behavior.html">
-<link rel="import" href="../cg-utils/cg-utilities-behavior.html">
+<link rel="import" href="../cg-behaviors/cg-base-behavior.html">
 <link rel="import" href="../cg-dropdown/cg-dropdown.html">
 
 <dom-module id="cg-input-select">
@@ -40,7 +40,6 @@
     .wrapper .item {
         @apply(--paper-font-body1);
         cursor: pointer;
-        white-space: nowrap;
     }
     .wrapper .item.iron-selected {
         font-weight: bold!important;
@@ -128,7 +127,7 @@
                 reflectToAttribute:true
             },
         },
-        behaviors:[CG.ValidatableBehavior, CG.UtilitiesBehavior],
+        behaviors:[CG.ValidatableBehavior, CG.BaseBehavior],
         _toggleDD:function(e){
             this.$.dd.toggle();
         },
